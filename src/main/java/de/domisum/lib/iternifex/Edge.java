@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
-public interface PathfindingEdge<NodeT extends PathfindingNode<NodeT>>
+public interface Edge<NodeT extends Node<NodeT>>
 {
 
 	/**
@@ -14,7 +14,7 @@ public interface PathfindingEdge<NodeT extends PathfindingNode<NodeT>>
 	 */
 	Set<NodeT> getNodes();
 
-	default NodeT getOther(NodeT node)
+	default NodeT getOther(Node<NodeT> node)
 	{
 		ArrayList<NodeT> nodes = new ArrayList<>(getNodes());
 
