@@ -2,7 +2,6 @@ package de.domisum.lib.iternifex;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.HashSet;
