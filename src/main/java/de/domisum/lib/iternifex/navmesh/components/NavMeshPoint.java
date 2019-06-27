@@ -18,13 +18,15 @@ public class NavMeshPoint extends Vector3D
 
 
 	// INIT
-	public NavMeshPoint()
+	public NavMeshPoint(double x, double y, double z)
 	{
-		this(UUID.randomUUID().toString());
+		this(UUID.randomUUID().toString(), x, y, z);
 	}
 
-	public NavMeshPoint(String id)
+	public NavMeshPoint(String id, double x, double y, double z)
 	{
+		super(x, y, z);
+
 		Validate.notNull(id, "id can't be null");
 		Validate.notBlank(id, "id can't be empty");
 

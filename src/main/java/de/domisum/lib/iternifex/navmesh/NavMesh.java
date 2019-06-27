@@ -16,6 +16,7 @@ import java.util.Set;
 public class NavMesh
 {
 
+	@Getter
 	private final String id;
 
 	@Getter
