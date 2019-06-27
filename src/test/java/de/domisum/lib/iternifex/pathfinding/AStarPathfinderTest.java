@@ -29,6 +29,21 @@ public class AStarPathfinderTest
 		Assertions.assertIterableEquals(path, Arrays.asList("a", "c", "d"));
 	}
 
+	@Test
+	void testSimpleGraph2() throws PathfindingException
+	{
+		EuclideanPlaneNode nodeA = new EuclideanPlaneNode("a", 0, 0);
+		EuclideanPlaneNode nodeB = new EuclideanPlaneNode("b", 0.5, 0.5);
+		EuclideanPlaneNode nodeC = new EuclideanPlaneNode("c", 0, 1);
+
+		nodeA.addEdgeTo(nodeB);
+		nodeB.addEdgeTo(nodeC);
+		nodeA.addEdgeTo(nodeC);
+
+		List<String> path = findPath(nodeA, nodeC);
+		Assertions.assertIterableEquals(path, Arrays.asList("a", "c"));
+	}
+
 	private List<String> findPath(EuclideanPlaneNode nodeA, EuclideanPlaneNode nodeB) throws PathfindingException
 	{
 		Pathfinder pathfinder = new AStarPathfinder();
