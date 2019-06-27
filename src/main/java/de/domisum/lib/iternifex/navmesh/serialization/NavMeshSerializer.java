@@ -43,7 +43,6 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 		return navMeshString.toString();
 	}
 
-
 	private void writePoints(NavMesh navMesh, StringBuilder navMeshString)
 	{
 		for(NavMeshPoint point : navMesh.getPoints())
