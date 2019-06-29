@@ -71,7 +71,7 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 					.append(LINE_ELEMENT_SEPARATOR)
 					.append(triangle.getPointB().getId())
 					.append(LINE_ELEMENT_SEPARATOR)
-					.append(triangle.getPointC())
+					.append(triangle.getPointC().getId())
 					.append(LINE_SEPARATOR);
 	}
 
