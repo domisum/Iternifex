@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex.pathfinding;
+package de.domisum.lib.iternifex.generic.pathfinding;
 
 import de.domisum.lib.iternifex.EuclideanPlaneNode;
 import org.junit.jupiter.api.Assertions;

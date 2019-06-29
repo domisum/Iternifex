@@ -1,7 +1,7 @@
-package de.domisum.lib.iternifex.pathfinding;
+package de.domisum.lib.iternifex.generic.pathfinding;
 
-import de.domisum.lib.iternifex.Edge;
-import de.domisum.lib.iternifex.Node;
+import de.domisum.lib.iternifex.generic.Edge;
+import de.domisum.lib.iternifex.generic.Node;
 
 import java.util.List;
 

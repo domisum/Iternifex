@@ -1,6 +1,6 @@
 package de.domisum.lib.iternifex.navmesh.components;
 
-import de.domisum.lib.iternifex.Edge;
+import de.domisum.lib.iternifex.generic.Edge;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
