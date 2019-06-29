@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class NavMeshEdge implements Edge<NavMeshTriangle, NavMeshEdge>
@@ -24,6 +25,28 @@ public abstract class NavMeshEdge implements Edge<NavMeshTriangle, NavMeshEdge>
 
 		this.triangleA = triangleA;
 		this.triangleB = triangleB;
+	}
+
+
+	// OBJECT
+	@Override
+	public final boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if((o == null) || (getClass() != o.getClass()))
+			return false;
+
+		NavMeshEdge that = (NavMeshEdge) o;
+		boolean equalsRightWayAround = triangleA.equals(that.triangleA) && triangleB.equals(that.triangleB);
+		boolean equalsInverted = triangleA.equals(that.triangleB) && triangleB.equals(that.triangleA);
+		return equalsRightWayAround || equalsInverted;
+	}
+
+	@Override
+	public final int hashCode()
+	{
+		return Objects.hash(triangleA)+Objects.hash(triangleB);
 	}
 
 

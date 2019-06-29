@@ -19,8 +19,8 @@ public interface Node<N extends Node<N, E>, E extends Edge<N, E>>
 		for(E edge : getEdges())
 		{
 			@SuppressWarnings("unchecked")
-			Node<N, E> edgeOther = edge.getOther((N) this);
-			if(Objects.equals(edgeOther, other))
+			Node<N, E> fromEdgeOther = edge.getOther((N) this);
+			if(Objects.equals(fromEdgeOther, other))
 				return edge;
 		}
 
