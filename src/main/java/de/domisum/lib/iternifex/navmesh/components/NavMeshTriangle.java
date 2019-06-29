@@ -3,7 +3,6 @@ package de.domisum.lib.iternifex.navmesh.components;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
-import de.domisum.lib.iternifex.Edge;
 import de.domisum.lib.iternifex.Node;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @EqualsAndHashCode(of = "id")
-public class NavMeshTriangle implements Node<NavMeshTriangle>
+public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 {
 
 	// MAIN ATTRUBUTES
@@ -89,7 +88,7 @@ public class NavMeshTriangle implements Node<NavMeshTriangle>
 
 	// NODE
 	@Override
-	public Set<Edge<NavMeshTriangle>> getEdges()
+	public Set<NavMeshEdge> getEdges()
 	{
 		return Collections.unmodifiableSet(edges);
 	}
@@ -104,6 +103,11 @@ public class NavMeshTriangle implements Node<NavMeshTriangle>
 	public void addEdge(NavMeshEdge edge)
 	{
 		edges.add(edge);
+	}
+
+	public void removeEdge(NavMeshEdge edge)
+	{
+		edges.remove(edge);
 	}
 
 }

@@ -7,22 +7,22 @@ import java.util.Set;
  * Represents a node on a graph.
  * Has to implement #equals() and #hashCode().
  *
- * @param <T> the type of node, the implementing class
+ * @param <N> the type of node, the implementing class
  */
-public interface Node<T extends Node<T>>
+public interface Node<N extends Node<N, E>, E extends Edge<N>>
 {
 
-	Set<Edge<T>> getEdges();
+	Set<E> getEdges();
 
-	default Edge<T> getEdgeTo(Node<T> other)
+	default E getEdgeTo(Node<N, E> other)
 	{
-		for(Edge<T> edge : getEdges())
+		for(E edge : getEdges())
 			if(Objects.equals(edge.getOther(this), other))
 				return edge;
 
-		throw new IllegalArgumentException("no edge to node "+other);
+		return null;
 	}
 
-	double getHeuristicWeightTo(T otherNode);
+	double getHeuristicWeightTo(N otherNode);
 
 }
