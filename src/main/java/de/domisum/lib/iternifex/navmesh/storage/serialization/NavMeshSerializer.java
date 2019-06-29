@@ -4,12 +4,14 @@ import de.domisum.lib.auxilium.contracts.serialization.JsonSerializer;
 import de.domisum.lib.auxilium.data.container.direction.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
+import de.domisum.lib.auxilium.util.PHR;
 import de.domisum.lib.iternifex.navmesh.NavMesh;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshEdge;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshPoint;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshTriangle;
 import de.domisum.lib.iternifex.navmesh.components.edges.NavMeshEdgeLadder;
 import de.domisum.lib.iternifex.navmesh.components.edges.NavMeshEdgeWalk;
+import org.apache.commons.lang3.SerializationException;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -155,7 +157,12 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 		Map<String, NavMeshPoint> pointMap = new HashMap<>();
 		Map<String, NavMeshTriangle> triangleMap = new HashMap<>();
 
-		for(String line : navMeshString.split(LINE_SEPARATOR))
+		String[] split = navMeshString.split(LINE_SEPARATOR);
+		for(int i = 0; i < split.length; i++)
+		{
+			int lineNumber = i+1;
+
+			String line = split[i];
 			if(line.startsWith(POINT_LINE_PREFIX))
 			{
 				NavMeshPoint point = parsePoint(line);
@@ -167,9 +174,10 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 				triangleMap.put(triangle.getId(), triangle);
 			}
 			else if(line.startsWith(EDGE_LINE_PREFIX))
-				parseAndAddEdge(line, triangleMap);
+				parseAndAddEdge(line, triangleMap, lineNumber);
 			else if(line.startsWith(NAV_MESH_LINE_PREFIX))
 				return parseNavMesh(pointMap, triangleMap, line);
+		}
 
 		throw new NavMeshSerializationException("navMesh string didn't contain final navMesh line");
 	}
@@ -202,7 +210,7 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 		return new NavMeshTriangle(id, pointA, pointB, pointC);
 	}
 
-	private void parseAndAddEdge(String line, Map<String, NavMeshTriangle> triangleMap)
+	private void parseAndAddEdge(String line, Map<String, NavMeshTriangle> triangleMap, int lineNumber)
 	{
 		String[] lineSplit = line.split(LINE_ELEMENT_SEPARATOR);
 
@@ -211,6 +219,11 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 
 		NavMeshTriangle triangleA = triangleMap.get(triangleAId);
 		NavMeshTriangle triangleB = triangleMap.get(triangleBId);
+
+		if(triangleA == null)
+			throw new SerializationException(PHR.r("unknown triangle {} in line {}", triangleAId, lineNumber));
+		if(triangleB == null)
+			throw new SerializationException(PHR.r("unknown triangle {} in line {}", triangleBId, lineNumber));
 
 		NavMeshEdge edge;
 		if(lineSplit.length == 3)
