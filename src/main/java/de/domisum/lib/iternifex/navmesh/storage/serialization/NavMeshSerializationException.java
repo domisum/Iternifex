@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex.navmesh.serialization;
+package de.domisum.lib.iternifex.navmesh.storage.serialization;
 
 public class NavMeshSerializationException extends RuntimeException
 {

@@ -1,13 +1,20 @@
 package de.domisum.lib.iternifex.navmesh;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.iternifex.navmesh.storage.NavMeshStorage;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class NavMeshRegistry
 {
 
+	// DEPENDENCIES
+	private final NavMeshStorage navMeshStorage;
+
+	// LIVE
 	private final Map<String, NavMesh> navMeshes = new HashMap<>();
 
 
@@ -47,7 +54,8 @@ public class NavMeshRegistry
 	// IO
 	public void save()
 	{
-		// TODO
+		for(NavMesh navMesh : navMeshes.values())
+			navMeshStorage.store(navMesh);
 	}
 
 }

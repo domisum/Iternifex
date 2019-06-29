@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex.navmesh.serialization;
+package de.domisum.lib.iternifex.navmesh.storage.serialization;
 
 import de.domisum.lib.auxilium.contracts.serialization.JsonSerializer;
 import de.domisum.lib.auxilium.data.container.direction.Direction2D;
