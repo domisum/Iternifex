@@ -21,7 +21,8 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 
 	// CONSTANTS
 	private static final String LINE_SEPARATOR = "\n";
-	private static final String LINE_ELEMENT_SEPARATOR = " ";
+	@SuppressWarnings("RegExpRepeatedSpace")
+	private static final String LINE_ELEMENT_SEPARATOR = "     ";
 
 	private static final String POINT_LINE_PREFIX = "point";
 	private static final String TRIANGLE_LINE_PREFIX = "triangle";
