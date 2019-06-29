@@ -43,4 +43,11 @@ public class NavMeshRegistry
 		navMeshes.get(navMeshId);
 	}
 
+
+	// IO
+	public void save()
+	{
+		// TODO
+	}
+
 }
