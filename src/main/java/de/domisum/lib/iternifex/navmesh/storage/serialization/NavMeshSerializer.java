@@ -136,6 +136,8 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 		navMeshString
 				.append(NAV_MESH_LINE_PREFIX)
 				.append(LINE_ELEMENT_SEPARATOR)
+				.append(navMesh.getId())
+				.append(LINE_ELEMENT_SEPARATOR)
 				.append(navMesh.getCenter().getX())
 				.append(LINE_ELEMENT_SEPARATOR)
 				.append(navMesh.getCenter().getY())
