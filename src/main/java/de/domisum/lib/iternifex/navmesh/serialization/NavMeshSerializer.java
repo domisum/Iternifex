@@ -1,6 +1,7 @@
 package de.domisum.lib.iternifex.navmesh.serialization;
 
 import de.domisum.lib.auxilium.contracts.serialization.JsonSerializer;
+import de.domisum.lib.auxilium.data.container.direction.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
 import de.domisum.lib.iternifex.Edge;
@@ -120,10 +121,12 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 					.append(LINE_ELEMENT_SEPARATOR)
 					.append(ladder.getTopLadderLocation().getY())
 					.append(LINE_ELEMENT_SEPARATOR)
-					.append(ladder.getTopLadderLocation().getZ());
+					.append(ladder.getTopLadderLocation().getZ())
+					.append(LINE_ELEMENT_SEPARATOR)
+					.append(ladder.getDirection());
 		}
 		else
-			throw new UnsupportedOperationException(
+			throw new NavMeshSerializationException(
 					"serialization of edge type '"+edge.getClass().getName()+"' is not yet supported");
 
 		navMeshString.append(LINE_SEPARATOR);
@@ -222,10 +225,12 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 			double topLadderLocationZ = Double.parseDouble(lineSplit[8]);
 			Vector3D topLadderLocation = new Vector3D(topLadderLocationX, topLadderLocationY, topLadderLocationZ);
 
-			edge = new NavMeshEdgeLadder(triangleA, triangleB, bottomLadderLocation, topLadderLocation);
+			Direction2D direction = Direction2D.valueOf(lineSplit[9]);
+
+			edge = new NavMeshEdgeLadder(triangleA, triangleB, bottomLadderLocation, topLadderLocation, direction);
 		}
 		else
-			throw new UnsupportedOperationException("deserialization of edge type '"+lineSplit[3]+"' not yet supported");
+			throw new NavMeshSerializationException("deserialization of edge type '"+lineSplit[3]+"' not yet supported");
 
 		triangleA.addEdge(edge);
 		triangleB.addEdge(edge);
