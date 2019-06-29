@@ -18,6 +18,14 @@ public class NavMeshRegistry
 	private final Map<String, NavMesh> navMeshes = new HashMap<>();
 
 
+	// INIT
+	public void initialize()
+	{
+		for(NavMesh navMesh : navMeshStorage.readAll())
+			register(navMesh);
+	}
+
+
 	// GETTERS
 	public NavMesh getNavMesh(String id)
 	{
