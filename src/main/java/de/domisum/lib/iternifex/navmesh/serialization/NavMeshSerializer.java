@@ -4,7 +4,6 @@ import de.domisum.lib.auxilium.contracts.serialization.JsonSerializer;
 import de.domisum.lib.auxilium.data.container.direction.Direction2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
-import de.domisum.lib.iternifex.Edge;
 import de.domisum.lib.iternifex.navmesh.NavMesh;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshEdge;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshPoint;
@@ -80,7 +79,7 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 	{
 		Set<Duo<NavMeshTriangle>> edgesSerialized = new HashSet<>();
 		for(NavMeshTriangle triangle : navMesh.getTriangles())
-			for(Edge<NavMeshTriangle> edge : triangle.getEdges())
+			for(NavMeshEdge edge : triangle.getEdges())
 			{
 				NavMeshTriangle otherTriangle = edge.getOther(triangle);
 
@@ -94,7 +93,7 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 	}
 
 	private void writeEdge(
-			StringBuilder navMeshString, NavMeshTriangle triangle, Edge<NavMeshTriangle> edge, NavMeshTriangle otherTriangle)
+			StringBuilder navMeshString, NavMeshTriangle triangle, NavMeshEdge edge, NavMeshTriangle otherTriangle)
 	{
 		navMeshString
 				.append(EDGE_LINE_PREFIX)

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class EuclideanPlaneEdge implements Edge<EuclideanPlaneNode>
+public class EuclideanPlaneEdge implements Edge<EuclideanPlaneNode, EuclideanPlaneEdge>
 {
 
 	private final EuclideanPlaneNode nodeA;

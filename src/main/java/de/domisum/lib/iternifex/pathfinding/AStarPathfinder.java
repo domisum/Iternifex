@@ -21,26 +21,26 @@ public class AStarPathfinder implements Pathfinder
 
 	// FIND PATH
 	@Override
-	public <T extends Node<T>> List<T> findPath(T startNode, T endNode) throws PathfindingException
+	public <N extends Node<N, E>, E extends Edge<N, E>> List<N> findPath(N startNode, N endNode) throws PathfindingException
 	{
 		return new PathFinding<>(startNode, endNode).findPath();
 	}
 
 	@RequiredArgsConstructor
-	private static class PathFinding<T extends Node<T>>
+	private static class PathFinding<N extends Node<N, E>, E extends Edge<N, E>>
 	{
 
 		// INPUT
-		private final T startNode;
-		private final T endNode;
+		private final N startNode;
+		private final N endNode;
 
 		// TEMP
 		private final SortedSet<PathFindingNode> unvisitedNodes = new TreeSet<>(Comparator.comparingDouble(PathFindingNode::getCombinedWeight));
-		private final Map<T, PathFindingNode> pathFindingNodeMap = new HashMap<>();
+		private final Map<N, PathFindingNode> pathFindingNodeMap = new HashMap<>();
 
 
 		// FIND PATH
-		public List<T> findPath() throws PathfindingException
+		public List<N> findPath() throws PathfindingException
 		{
 			unvisitedNodes.add(getPathfindingNodeFor(startNode));
 
@@ -62,9 +62,9 @@ public class AStarPathfinder implements Pathfinder
 			return unvisitedNodes.first();
 		}
 
-		private List<T> buildPath(PathFindingNode endPathfindingNode)
+		private List<N> buildPath(PathFindingNode endPathfindingNode)
 		{
-			List<T> nodesReversed = new ArrayList<>();
+			List<N> nodesReversed = new ArrayList<>();
 			PathFindingNode node = endPathfindingNode;
 			while(node != null)
 			{
@@ -77,9 +77,9 @@ public class AStarPathfinder implements Pathfinder
 
 		private void visitNode(PathFindingNode node)
 		{
-			for(Edge<T> edge : node.getNode().getEdges())
+			for(Edge<N, E> edge : node.getNode().getEdges())
 			{
-				T reachedNode = edge.getOther(node.getNode());
+				N reachedNode = edge.getOther(node.getNode());
 				PathFindingNode reachedPathfindingNode = getPathfindingNodeFor(reachedNode);
 
 				reachNode(node, reachedPathfindingNode);
@@ -99,7 +99,7 @@ public class AStarPathfinder implements Pathfinder
 		}
 
 
-		private PathFindingNode getPathfindingNodeFor(T node)
+		private PathFindingNode getPathfindingNodeFor(N node)
 		{
 			PathFindingNode pathFindingNode = pathFindingNodeMap.get(node);
 			if(pathFindingNode == null)
@@ -117,7 +117,7 @@ public class AStarPathfinder implements Pathfinder
 		{
 
 			@Getter
-			private final T node;
+			private final N node;
 			@Setter
 			@Getter
 			private PathFindingNode reachedFrom;

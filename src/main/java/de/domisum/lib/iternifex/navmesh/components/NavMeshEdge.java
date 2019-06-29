@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class NavMeshEdge implements Edge<NavMeshTriangle>
+public abstract class NavMeshEdge implements Edge<NavMeshTriangle, NavMeshEdge>
 {
 	@Getter
 	private final NavMeshTriangle triangleA;
@@ -17,7 +17,7 @@ public abstract class NavMeshEdge implements Edge<NavMeshTriangle>
 
 
 	// INIT
-	public NavMeshEdge(NavMeshTriangle triangleA, NavMeshTriangle triangleB)
+	protected NavMeshEdge(NavMeshTriangle triangleA, NavMeshTriangle triangleB)
 	{
 		Validate.notNull(triangleA, "triangleA can't be null");
 		Validate.notNull(triangleB, "triangleB can't be null");

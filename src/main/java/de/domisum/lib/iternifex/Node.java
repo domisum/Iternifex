@@ -9,16 +9,20 @@ import java.util.Set;
  *
  * @param <N> the type of node, the implementing class
  */
-public interface Node<N extends Node<N, E>, E extends Edge<N>>
+public interface Node<N extends Node<N, E>, E extends Edge<N, E>>
 {
 
 	Set<E> getEdges();
 
-	default E getEdgeTo(Node<N, E> other)
+	default E getEdgeTo(N other)
 	{
 		for(E edge : getEdges())
-			if(Objects.equals(edge.getOther(this), other))
+		{
+			// noinspection unchecked
+			Node<N, E> edgeOther = edge.getOther((N) this);
+			if(Objects.equals(edgeOther, other))
 				return edge;
+		}
 
 		return null;
 	}

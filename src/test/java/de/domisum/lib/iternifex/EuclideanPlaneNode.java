@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class EuclideanPlaneNode implements Node<EuclideanPlaneNode>
+public class EuclideanPlaneNode implements Node<EuclideanPlaneNode, EuclideanPlaneEdge>
 {
 
 	@Getter
@@ -19,7 +19,7 @@ public class EuclideanPlaneNode implements Node<EuclideanPlaneNode>
 	@Getter
 	private final double y;
 
-	private final Set<Edge<EuclideanPlaneNode>> edges = new HashSet<>();
+	private final Set<EuclideanPlaneEdge> edges = new HashSet<>();
 
 
 	// INIT
@@ -40,7 +40,7 @@ public class EuclideanPlaneNode implements Node<EuclideanPlaneNode>
 
 	// NODE
 	@Override
-	public Set<Edge<EuclideanPlaneNode>> getEdges()
+	public Set<EuclideanPlaneEdge> getEdges()
 	{
 		return Collections.unmodifiableSet(edges);
 	}

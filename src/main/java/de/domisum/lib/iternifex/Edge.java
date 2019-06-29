@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
-public interface Edge<NodeT extends Node<NodeT, Edge<NodeT>>>
+public interface Edge<N extends Node<N, E>, E extends Edge<N, E>>
 {
 
 	/**
@@ -12,11 +12,11 @@ public interface Edge<NodeT extends Node<NodeT, Edge<NodeT>>>
 	 *
 	 * @return the nodes this edge connects
 	 */
-	Set<NodeT> getNodes();
+	Set<N> getNodes();
 
-	default NodeT getOther(Node<NodeT, Edge<NodeT>> node)
+	default N getOther(N node)
 	{
-		ArrayList<NodeT> nodes = new ArrayList<>(getNodes());
+		ArrayList<N> nodes = new ArrayList<>(getNodes());
 
 		if(Objects.equals(nodes.get(0), node))
 			return nodes.get(1);
