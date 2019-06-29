@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class NavMeshInFolderStorage implements NavMeshStorage
+public class NavMeshInDirectoryStorage implements NavMeshStorage
 {
 
 	private final File directory;
