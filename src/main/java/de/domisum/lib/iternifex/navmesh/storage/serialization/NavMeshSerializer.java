@@ -84,13 +84,14 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 		for(NavMeshTriangle triangle : navMesh.getTriangles())
 			for(NavMeshEdge edge : triangle.getEdges())
 			{
-				NavMeshTriangle otherTriangle = edge.getOther(triangle);
+				NavMeshTriangle triangleA = edge.getTriangleA();
+				NavMeshTriangle triangleB = edge.getTriangleB();
 
-				Duo<NavMeshTriangle> duo = new Duo<>(triangle, otherTriangle);
+				Duo<NavMeshTriangle> duo = new Duo<>(triangleA, triangleB);
 				if(edgesSerialized.contains(duo) || edgesSerialized.contains(duo.getInverted()))
 					continue;
 
-				writeEdge(navMeshString, triangle, edge, otherTriangle);
+				writeEdge(navMeshString, triangleA, edge, triangleB);
 				edgesSerialized.add(duo);
 			}
 	}
