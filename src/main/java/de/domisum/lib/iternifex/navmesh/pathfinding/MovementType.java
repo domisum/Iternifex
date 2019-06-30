@@ -4,6 +4,6 @@ public enum MovementType
 {
 
 	WALK,
-	JUMP
+	LADDER
 
 }

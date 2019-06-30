@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,6 +65,11 @@ public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 
 
 	// GETTERS
+	public Set<NavMeshPoint> getPoints()
+	{
+		return new HashSet<>(Arrays.asList(getPointA(), getPointB(), getPointC()));
+	}
+
 	public boolean containsLocation(Vector3D location)
 	{
 		Vector2D pointA2D = new Vector2D(pointA.getX(), pointA.getZ());

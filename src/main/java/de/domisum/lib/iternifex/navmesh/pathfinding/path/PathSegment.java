@@ -1,11 +1,12 @@
-package de.domisum.lib.iternifex.navmesh.pathfinding;
+package de.domisum.lib.iternifex.navmesh.pathfinding.path;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
+import de.domisum.lib.iternifex.navmesh.pathfinding.MovementType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PathSegment
+public abstract class PathSegment
 {
 
 	@Getter

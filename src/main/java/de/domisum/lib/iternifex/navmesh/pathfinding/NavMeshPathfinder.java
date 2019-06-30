@@ -6,6 +6,7 @@ import de.domisum.lib.iternifex.generic.pathfinding.PathfindingException;
 import de.domisum.lib.iternifex.navmesh.NavMesh;
 import de.domisum.lib.iternifex.navmesh.NavMeshRegistry;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshTriangle;
+import de.domisum.lib.iternifex.navmesh.pathfinding.path.PathSegment;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
