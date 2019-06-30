@@ -102,8 +102,8 @@ public class NavMeshTriangleTraverser
 
 			Vector3D currentToA = portal.getA().subtract(currentLocation);
 			Vector3D currentToB = portal.getB().subtract(currentLocation);
-			NavMeshPoint portalPointLeft = isLeftOf(currentToA, currentToB, true) ? sharedPoints.getA() : sharedPoints.getB();
-			NavMeshPoint portalPointRight = isLeftOf(currentToA, currentToB, true) ? sharedPoints.getB() : sharedPoints.getA();
+			Vector3D portalPointLeft = isLeftOf(currentToA, currentToB, true) ? portal.getA() : portal.getB();
+			Vector3D portalPointRight = isLeftOf(currentToA, currentToB, true) ? portal.getB() : portal.getA();
 
 			if(funnelPointLeft == null)
 			{
