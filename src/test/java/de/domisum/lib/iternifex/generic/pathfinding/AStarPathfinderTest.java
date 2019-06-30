@@ -1,6 +1,9 @@
 package de.domisum.lib.iternifex.generic.pathfinding;
 
 import de.domisum.lib.iternifex.EuclideanPlaneNode;
+import de.domisum.lib.iternifex.generic.pathfinding.AStarPathfinder;
+import de.domisum.lib.iternifex.generic.pathfinding.Pathfinder;
+import de.domisum.lib.iternifex.generic.pathfinding.PathfindingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +40,11 @@ public class AStarPathfinderTest
 		EuclideanPlaneNode nodeC = new EuclideanPlaneNode("c", 0, 1);
 
 		nodeA.addEdgeTo(nodeB);
+		nodeB.addEdgeTo(nodeA);
 		nodeB.addEdgeTo(nodeC);
+		nodeC.addEdgeTo(nodeB);
 		nodeA.addEdgeTo(nodeC);
+		nodeC.addEdgeTo(nodeA);
 
 		List<String> path = findPath(nodeA, nodeC);
 		Assertions.assertIterableEquals(path, Arrays.asList("a", "c"));
