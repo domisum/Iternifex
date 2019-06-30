@@ -235,12 +235,12 @@ public class NavMeshSerializer implements JsonSerializer<NavMesh>
 			double bottomLadderLocationZ = Double.parseDouble(lineSplit[6]);
 			Vector3D bottomLadderLocation = new Vector3D(bottomLadderLocationX, bottomLadderLocationY, bottomLadderLocationZ);
 
-			double topLadderLocationX = Double.parseDouble(lineSplit[6]);
-			double topLadderLocationY = Double.parseDouble(lineSplit[7]);
-			double topLadderLocationZ = Double.parseDouble(lineSplit[8]);
+			double topLadderLocationX = Double.parseDouble(lineSplit[7]);
+			double topLadderLocationY = Double.parseDouble(lineSplit[8]);
+			double topLadderLocationZ = Double.parseDouble(lineSplit[9]);
 			Vector3D topLadderLocation = new Vector3D(topLadderLocationX, topLadderLocationY, topLadderLocationZ);
 
-			Direction2D direction = Direction2D.valueOf(lineSplit[9]);
+			Direction2D direction = Direction2D.valueOf(lineSplit[10]);
 
 			edge = new NavMeshEdgeLadder(triangleA, triangleB, bottomLadderLocation, topLadderLocation, direction);
 		}
