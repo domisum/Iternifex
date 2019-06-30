@@ -3,6 +3,7 @@ package de.domisum.lib.iternifex.navmesh.pathfinding;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
+import de.domisum.lib.auxilium.util.PHR;
 import de.domisum.lib.iternifex.DebugSettings;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshEdge;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshPoint;
@@ -15,18 +16,17 @@ import de.domisum.lib.iternifex.navmesh.pathfinding.path.PathSegmentWalk;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class NavMeshTriangleTraverser
 {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = java.util.logging.Logger.getLogger("triangleTraverser");
 
 
 	// SETTINGS
@@ -54,6 +54,10 @@ public class NavMeshTriangleTraverser
 		private Vector3D funnelPointLeft = null;
 		private Vector3D funnelPointRight = null;
 
+		private int currentTargetTriangleIndex;
+		private int funnelPointLeftTriangleIndex = -1;
+		private int funnelPointRightTriangleIndex = -1;
+
 		// OUTPUT
 		private final List<PathSegment> pathSegments = new ArrayList<>();
 
@@ -63,13 +67,12 @@ public class NavMeshTriangleTraverser
 		{
 			currentLocation = startLocation;
 
-			NavMeshTriangle lastTriangle = null;
-			for(NavMeshTriangle triangle : triangleSequence)
+			for(currentTargetTriangleIndex = 1; currentTargetTriangleIndex < triangleSequence.size(); currentTargetTriangleIndex++
+			)
 			{
-				if(lastTriangle != null)
-					traverseEdge(lastTriangle, triangle);
-
-				lastTriangle = triangle;
+				NavMeshTriangle triangleBefore = triangleSequence.get(currentTargetTriangleIndex-1);
+				NavMeshTriangle triangle = triangleSequence.get(currentTargetTriangleIndex);
+				traverseEdge(triangleBefore, triangle);
 			}
 
 			arriveAtLocation(endLocation);
@@ -91,7 +94,7 @@ public class NavMeshTriangleTraverser
 		private void traversePortal(NavMeshTriangle from, NavMeshTriangle to)
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId());
+				logger.info(PHR.r("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId()));
 
 			Duo<NavMeshPoint> sharedPoints = getSharedPoints(from, to);
 			LineSegment3D portal = new LineSegment3D(sharedPoints.getA(), sharedPoints.getB()).getShortenedBothEnds(
@@ -109,6 +112,9 @@ public class NavMeshTriangleTraverser
 
 				funnelPointLeft = portalPointLeft;
 				funnelPointRight = portalPointRight;
+				funnelPointLeftTriangleIndex = currentTargetTriangleIndex;
+				funnelPointRightTriangleIndex = currentTargetTriangleIndex;
+
 				return;
 			}
 
@@ -143,6 +149,7 @@ public class NavMeshTriangleTraverser
 					logger.info("restricting funnel on left side");
 
 				funnelPointLeft = portalPointLeft;
+				funnelPointLeftTriangleIndex = currentTargetTriangleIndex;
 			}
 
 			// further restrict funnel on right side
@@ -152,17 +159,19 @@ public class NavMeshTriangleTraverser
 					logger.info("restricting funnel on right side");
 
 				funnelPointRight = portalPointRight;
+				funnelPointRightTriangleIndex = currentTargetTriangleIndex;
 			}
 		}
 
 		private void pathToFunnelPointLeft()
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("creating path to funnel point left");
+				logger.info("creating path to funnel point left "+funnelPointLeft);
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointLeft);
 			pathSegments.add(pathSegmentWalk);
 
+			currentTargetTriangleIndex = funnelPointLeftTriangleIndex;
 			currentLocation = funnelPointLeft;
 			funnelPointLeft = null;
 			funnelPointRight = null;
@@ -171,11 +180,12 @@ public class NavMeshTriangleTraverser
 		private void pathToFunnelPointRight()
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("creating path to funnel point right");
+				logger.info("creating path to funnel point right "+funnelPointRight);
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointRight);
 			pathSegments.add(pathSegmentWalk);
 
+			currentTargetTriangleIndex = funnelPointRightTriangleIndex;
 			currentLocation = funnelPointRight;
 			funnelPointLeft = null;
 			funnelPointRight = null;
