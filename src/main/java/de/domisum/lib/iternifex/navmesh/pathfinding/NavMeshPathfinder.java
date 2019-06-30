@@ -25,8 +25,8 @@ public class NavMeshPathfinder
 	// PATHFINDING
 	public List<PathSegment> findPath(Vector3D start, Vector3D end) throws PathfindingException
 	{
-		NavMeshTriangle endTriangle = getEndTriangle(end);
 		NavMeshTriangle startTriangle = getStartTriangle(start);
+		NavMeshTriangle endTriangle = getEndTriangle(end);
 
 		if(!navMeshRegistry.getNavMeshAt(start).equals(navMeshRegistry.getNavMeshAt(end)))
 			throw new PathfindingException("start and end are on different navMeshes");
