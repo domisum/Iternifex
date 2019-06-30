@@ -54,7 +54,7 @@ public class NavMeshTriangleTraverser
 		private Vector3D funnelPointLeft = null;
 		private Vector3D funnelPointRight = null;
 
-		private int currentTargetTriangleIndex;
+		private int currentTargetTriangleIndex = 1;
 		private int funnelPointLeftTriangleIndex = -1;
 		private int funnelPointRightTriangleIndex = -1;
 
@@ -67,8 +67,14 @@ public class NavMeshTriangleTraverser
 		{
 			currentLocation = startLocation;
 
-			for(currentTargetTriangleIndex = 1; currentTargetTriangleIndex < triangleSequence.size(); currentTargetTriangleIndex++
-			)
+			traverseEdges();
+
+			return new ArrayList<>(pathSegments);
+		}
+
+		private void traverseEdges()
+		{
+			for(; currentTargetTriangleIndex < triangleSequence.size(); currentTargetTriangleIndex++)
 			{
 				NavMeshTriangle triangleBefore = triangleSequence.get(currentTargetTriangleIndex-1);
 				NavMeshTriangle triangle = triangleSequence.get(currentTargetTriangleIndex);
@@ -76,8 +82,6 @@ public class NavMeshTriangleTraverser
 			}
 
 			arriveAtLocation(endLocation);
-
-			return new ArrayList<>(pathSegments);
 		}
 
 		private void traverseEdge(NavMeshTriangle from, NavMeshTriangle to)
@@ -127,7 +131,7 @@ public class NavMeshTriangleTraverser
 			// accept left corner as new waypoint
 			if(isLeftOf(toPortalPointLeft, toFunnelPointLeft, false) && isLeftOf(toPortalPointRight, toFunnelPointLeft, false))
 			{
-				pathToFunnelPointLeft();
+				pathToFunnelPointLeft(false);
 				return;
 			}
 
@@ -137,7 +141,7 @@ public class NavMeshTriangleTraverser
 					false
 			))
 			{
-				pathToFunnelPointRight();
+				pathToFunnelPointRight(false);
 
 				return;
 			}
@@ -163,7 +167,7 @@ public class NavMeshTriangleTraverser
 			}
 		}
 
-		private void pathToFunnelPointLeft()
+		private void pathToFunnelPointLeft(boolean triangleIndexPlusOne)
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
 				logger.info("creating path to funnel point left "+funnelPointLeft);
@@ -171,13 +175,13 @@ public class NavMeshTriangleTraverser
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointLeft);
 			pathSegments.add(pathSegmentWalk);
 
-			currentTargetTriangleIndex = funnelPointLeftTriangleIndex;
+			currentTargetTriangleIndex = funnelPointLeftTriangleIndex+(triangleIndexPlusOne ? 1 : 0);
 			currentLocation = funnelPointLeft;
 			funnelPointLeft = null;
 			funnelPointRight = null;
 		}
 
-		private void pathToFunnelPointRight()
+		private void pathToFunnelPointRight(boolean triangleIndexPlusOne)
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
 				logger.info("creating path to funnel point right "+funnelPointRight);
@@ -185,7 +189,7 @@ public class NavMeshTriangleTraverser
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointRight);
 			pathSegments.add(pathSegmentWalk);
 
-			currentTargetTriangleIndex = funnelPointRightTriangleIndex;
+			currentTargetTriangleIndex = funnelPointRightTriangleIndex+(triangleIndexPlusOne ? 1 : 0);
 			currentLocation = funnelPointRight;
 			funnelPointLeft = null;
 			funnelPointRight = null;
@@ -232,27 +236,37 @@ public class NavMeshTriangleTraverser
 
 		private void arriveAtLocation(Vector3D location)
 		{
-			handleLastCornerIfNeeded(location);
+			boolean traverseAgain = handleLastCornerIfNeeded(location);
+			if(traverseAgain)
+				traverseEdges();
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, location);
 			pathSegments.add(pathSegmentWalk);
 			currentLocation = location;
 		}
 
-		private void handleLastCornerIfNeeded(Vector3D location)
+		private boolean handleLastCornerIfNeeded(Vector3D location)
 		{
 			if(funnelPointLeft == null)
-				return;
+				return false;
 
 			Vector3D toLocation = location.subtract(currentLocation);
 			Vector3D toFunnelPointLeft = funnelPointLeft.subtract(currentLocation);
 			Vector3D toFunnelPointRight = funnelPointRight.subtract(currentLocation);
 
 			if(isLeftOf(toLocation, toFunnelPointLeft, false))
-				pathToFunnelPointLeft();
+			{
+				pathToFunnelPointLeft(true);
+				return true;
+			}
 
 			if(isRightOf(toLocation, toFunnelPointRight, false))
-				pathToFunnelPointRight();
+			{
+				pathToFunnelPointRight(true);
+				return true;
+			}
+
+			return false;
 		}
 
 	}
