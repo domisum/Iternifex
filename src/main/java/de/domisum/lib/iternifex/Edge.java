@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex.generic;
+package de.domisum.lib.iternifex;
 
 import java.util.ArrayList;
 import java.util.Objects;

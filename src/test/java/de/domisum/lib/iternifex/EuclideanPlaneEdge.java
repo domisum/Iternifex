@@ -1,6 +1,5 @@
 package de.domisum.lib.iternifex;
 
-import de.domisum.lib.iternifex.generic.Edge;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

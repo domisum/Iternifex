@@ -1,8 +1,8 @@
 package de.domisum.lib.iternifex.navmesh.pathfinding;
 
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
-import de.domisum.lib.iternifex.generic.pathfinding.AStarPathfinder;
-import de.domisum.lib.iternifex.generic.pathfinding.PathfindingException;
+import de.domisum.lib.iternifex.pathfinding.AStarPathfinder;
+import de.domisum.lib.iternifex.pathfinding.PathfindingException;
 import de.domisum.lib.iternifex.navmesh.NavMesh;
 import de.domisum.lib.iternifex.navmesh.NavMeshRegistry;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshTriangle;
@@ -32,6 +32,8 @@ public class NavMeshPathfinder
 			throw new PathfindingException("start and end are on different navMeshes");
 
 		List<NavMeshTriangle> triangleSequence = nodePathfinder.findPath(startTriangle, endTriangle);
+		System.out.println("found triangleSequence");
+
 		List<PathSegment> pathSegments = navMeshTriangleTraverser.traverse(triangleSequence, start, end);
 
 		return pathSegments;

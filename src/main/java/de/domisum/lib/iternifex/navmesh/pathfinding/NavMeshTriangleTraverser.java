@@ -3,6 +3,7 @@ package de.domisum.lib.iternifex.navmesh.pathfinding;
 import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
+import de.domisum.lib.iternifex.DebugSettings;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshEdge;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshPoint;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshTriangle;
@@ -14,6 +15,8 @@ import de.domisum.lib.iternifex.navmesh.pathfinding.path.PathSegmentWalk;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +25,9 @@ import java.util.Set;
 
 public class NavMeshTriangleTraverser
 {
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 
 	// SETTINGS
 	@Getter
@@ -84,6 +90,9 @@ public class NavMeshTriangleTraverser
 
 		private void traversePortal(NavMeshTriangle from, NavMeshTriangle to)
 		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId());
+
 			Duo<NavMeshPoint> sharedPoints = getSharedPoints(from, to);
 			LineSegment3D portal = new LineSegment3D(sharedPoints.getA(), sharedPoints.getB()).getShortenedBothEnds(
 					portalEdgeDistance);
@@ -95,6 +104,9 @@ public class NavMeshTriangleTraverser
 
 			if(funnelPointLeft == null)
 			{
+				if(DebugSettings.DEBUG_ACTIVE)
+					logger.info("funnel points not set, setting them to current portal points");
+
 				funnelPointLeft = portalPointLeft;
 				funnelPointRight = portalPointRight;
 				return;
@@ -126,15 +138,28 @@ public class NavMeshTriangleTraverser
 
 			// further restrict funnel on left side
 			if(isRightOf(toPortalPointLeft, toFunnelPointLeft, true))
+			{
+				if(DebugSettings.DEBUG_ACTIVE)
+					logger.info("restricting funnel on left side");
+
 				funnelPointLeft = portalPointLeft;
+			}
 
 			// further restrict funnel on right side
 			if(isLeftOf(toPortalPointRight, toFunnelPointRight, true))
+			{
+				if(DebugSettings.DEBUG_ACTIVE)
+					logger.info("restricting funnel on right side");
+
 				funnelPointRight = portalPointRight;
+			}
 		}
 
 		private void pathToFunnelPointLeft()
 		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("creating path to funnel point left");
+
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointLeft);
 			pathSegments.add(pathSegmentWalk);
 
@@ -145,6 +170,9 @@ public class NavMeshTriangleTraverser
 
 		private void pathToFunnelPointRight()
 		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("creating path to funnel point right");
+
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointRight);
 			pathSegments.add(pathSegmentWalk);
 

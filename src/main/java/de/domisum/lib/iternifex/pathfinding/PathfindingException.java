@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex.generic.pathfinding;
+package de.domisum.lib.iternifex.pathfinding;
 
 public class PathfindingException extends Exception
 {

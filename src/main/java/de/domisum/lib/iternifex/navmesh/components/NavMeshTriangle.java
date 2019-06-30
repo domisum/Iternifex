@@ -3,7 +3,7 @@ package de.domisum.lib.iternifex.navmesh.components;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
-import de.domisum.lib.iternifex.generic.Node;
+import de.domisum.lib.iternifex.Node;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;

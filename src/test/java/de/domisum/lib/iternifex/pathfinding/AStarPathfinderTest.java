@@ -1,9 +1,6 @@
-package de.domisum.lib.iternifex.generic.pathfinding;
+package de.domisum.lib.iternifex.pathfinding;
 
 import de.domisum.lib.iternifex.EuclideanPlaneNode;
-import de.domisum.lib.iternifex.generic.pathfinding.AStarPathfinder;
-import de.domisum.lib.iternifex.generic.pathfinding.Pathfinder;
-import de.domisum.lib.iternifex.generic.pathfinding.PathfindingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
