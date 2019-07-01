@@ -4,7 +4,7 @@ import de.domisum.lib.auxilium.data.container.math.LineSegment3D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.tuple.Duo;
 import de.domisum.lib.auxilium.util.PHR;
-import de.domisum.lib.iternifex.DebugSettings;
+import de.domisum.lib.iternifex.debug.DebugLogger;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshEdge;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshPoint;
 import de.domisum.lib.iternifex.navmesh.components.NavMeshTriangle;
@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public class NavMeshTriangleTraverser
 {
 
-	private final Logger logger = Logger.getLogger("triangleTraverser");
+
 
 
 	// CONSTANTS
@@ -72,12 +71,10 @@ public class NavMeshTriangleTraverser
 
 			traverseEdges(triangleSequence.size());
 
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("upcoming: arrive at end location");
+			DebugLogger.log("upcoming: arrive at end location");
 			arriveAtLocation(endLocation);
 
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("path segments: "+pathSegments);
+			DebugLogger.log("path segments: "+pathSegments);
 			return new ArrayList<>(pathSegments);
 		}
 
@@ -108,8 +105,7 @@ public class NavMeshTriangleTraverser
 		// portal traversal
 		private void traversePortal(NavMeshTriangle from, NavMeshTriangle to)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId()));
+			DebugLogger.log(PHR.r("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId()));
 
 			Duo<NavMeshPoint> sharedPoints = getSharedPoints(from, to);
 			LineSegment3D portal = new LineSegment3D(sharedPoints.getA(), sharedPoints.getB()).getShortenedBothEnds(
@@ -132,8 +128,7 @@ public class NavMeshTriangleTraverser
 			if(funnelPointLeft != null)
 				return false;
 
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("funnel points not set, setting them to current portal points");
+			DebugLogger.log("funnel points not set, setting them to current portal points");
 
 			funnelPointLeft = portalPointLeft;
 			funnelPointRight = portalPointRight;
@@ -201,8 +196,7 @@ public class NavMeshTriangleTraverser
 		{
 			if(isRightOf(toPortalPointLeft, toFunnelPointLeft, true))
 			{
-				if(DebugSettings.DEBUG_ACTIVE)
-					logger.info("restricting funnel on left side");
+				DebugLogger.log("restricting funnel on left side");
 
 				funnelPointLeft = portalPointLeft;
 				funnelPointLeftTriangleIndex = currentTargetTriangleIndex;
@@ -214,8 +208,7 @@ public class NavMeshTriangleTraverser
 		{
 			if(isLeftOf(toPortalPointRight, toFunnelPointRight, true))
 			{
-				if(DebugSettings.DEBUG_ACTIVE)
-					logger.info("restricting funnel on right side");
+				DebugLogger.log("restricting funnel on right side");
 
 				funnelPointRight = portalPointRight;
 				funnelPointRightTriangleIndex = currentTargetTriangleIndex;
@@ -226,8 +219,7 @@ public class NavMeshTriangleTraverser
 		// ladder traversal
 		private void traverseLadder(NavMeshTriangle from, NavMeshEdgeLadder ladder)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("traversing ladder from triangle '{}' to '{}'", from, ladder.getOther(from)));
+			DebugLogger.log(PHR.r("traversing ladder from triangle '{}' to '{}'", from, ladder.getOther(from)));
 
 			Vector3D ladderStartLocation = ladder.getTriangleA().equals(from) ?
 					ladder.getBottomLadderLocation() :
@@ -251,8 +243,7 @@ public class NavMeshTriangleTraverser
 		// used throughout
 		private int pathToFunnelPointLeft(boolean triangleIndexPlusOne)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("creating path to funnel point left "+funnelPointLeft);
+			DebugLogger.log("creating path to funnel point left "+funnelPointLeft);
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointLeft);
 			pathSegments.add(pathSegmentWalk);
@@ -266,8 +257,7 @@ public class NavMeshTriangleTraverser
 
 		private int pathToFunnelPointRight(boolean triangleIndexPlusOne)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("creating path to funnel point right "+funnelPointRight);
+			DebugLogger.log("creating path to funnel point right "+funnelPointRight);
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointRight);
 			pathSegments.add(pathSegmentWalk);
@@ -281,8 +271,7 @@ public class NavMeshTriangleTraverser
 
 		private void reachPoint(Vector3D point)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("reaching point: "+point);
+			DebugLogger.log("reaching point: "+point);
 
 			currentLocation = point;
 			funnelPointLeft = null;
@@ -295,19 +284,16 @@ public class NavMeshTriangleTraverser
 		{
 			Integer retraverseUpToIndex = handleLastCornerIfNeeded(location);
 
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("arriving at location: {} (traverse again: {})", location, retraverseUpToIndex));
+			DebugLogger.log(PHR.r("arriving at location: {} (traverse again: {})", location, retraverseUpToIndex));
 
 			if(retraverseUpToIndex != null)
 			{
 				traverseEdges(retraverseUpToIndex);
-				if(DebugSettings.DEBUG_ACTIVE)
-					logger.info("returning from inner traverseEdges");
+				DebugLogger.log("returning from inner traverseEdges");
 			}
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, location);
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("arriving; added path segment: "+pathSegmentWalk);
+			DebugLogger.log("arriving; added path segment: "+pathSegmentWalk);
 
 			pathSegments.add(pathSegmentWalk);
 			reachPoint(location);

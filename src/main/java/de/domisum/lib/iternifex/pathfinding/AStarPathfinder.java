@@ -2,7 +2,7 @@ package de.domisum.lib.iternifex.pathfinding;
 
 import com.google.common.collect.Lists;
 import de.domisum.lib.auxilium.util.PHR;
-import de.domisum.lib.iternifex.DebugSettings;
+import de.domisum.lib.iternifex.debug.DebugLogger;
 import de.domisum.lib.iternifex.Edge;
 import de.domisum.lib.iternifex.Node;
 import lombok.EqualsAndHashCode;
@@ -51,16 +51,14 @@ public class AStarPathfinder implements Pathfinder
 		public List<N> findPath() throws PathfindingException
 		{
 			unvisitedNodes.add(getPathfindingNodeFor(startNode));
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("Starting pathfinding...");
+			DebugLogger.log("Starting pathfinding...");
 
 			while(!unvisitedNodes.isEmpty())
 			{
-				if(DebugSettings.DEBUG_ACTIVE)
-					logger.info(PHR.r(
-							"Unvisited nodes: {}",
-							unvisitedNodes.stream().map(PathFindingNode::getNode).collect(Collectors.toList())
-					));
+				DebugLogger.log(PHR.r(
+								"Unvisited nodes: {}",
+								unvisitedNodes.stream().map(PathFindingNode::getNode).collect(Collectors.toList())
+						));
 
 				PathFindingNode nodeToVisit = popBestUnvisitedNode();
 				visitNode(nodeToVisit);
@@ -80,30 +78,26 @@ public class AStarPathfinder implements Pathfinder
 
 		private List<N> buildPath(PathFindingNode endPathfindingNode)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("Starting to build path...");
+			DebugLogger.log("Starting to build path...");
 
 			List<N> nodesReversed = new ArrayList<>();
 			PathFindingNode node = endPathfindingNode;
 			while(node != null)
 			{
 				nodesReversed.add(node.getNode());
-				if(DebugSettings.DEBUG_ACTIVE)
-					logger.info(PHR.r("Added node '{}' to reverse path", node.getNode()));
+				DebugLogger.log(PHR.r("Added node '{}' to reverse path", node.getNode()));
 
 				node = node.getReachedFrom();
 			}
 
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("Building reversed path done, reversing to get it into right order"));
+			DebugLogger.log(PHR.r("Building reversed path done, reversing to get it into right order"));
 
 			return new ArrayList<>(Lists.reverse(nodesReversed));
 		}
 
 		private void visitNode(PathFindingNode node)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("Visiting node '{}'", node.getNode()));
+			DebugLogger.log(PHR.r("Visiting node '{}'", node.getNode()));
 
 			for(Edge<N, E> edge : node.getNode().getEdges())
 			{
@@ -116,8 +110,7 @@ public class AStarPathfinder implements Pathfinder
 
 		private void reachNode(PathFindingNode nodeFrom, PathFindingNode node)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("Reaching node '{}' from node '{}'", node.getNode(), nodeFrom.getNode()));
+			DebugLogger.log(PHR.r("Reaching node '{}' from node '{}'", node.getNode(), nodeFrom.getNode()));
 
 			boolean nodeUnreachedBefore = node.getReachedFrom() == null;
 

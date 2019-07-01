@@ -1,4 +1,4 @@
-package de.domisum.lib.iternifex;
+package de.domisum.lib.iternifex.debug;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
