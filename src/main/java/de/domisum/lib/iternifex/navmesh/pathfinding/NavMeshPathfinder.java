@@ -32,8 +32,6 @@ public class NavMeshPathfinder
 			throw new PathfindingException("start and end are on different navMeshes");
 
 		List<NavMeshTriangle> triangleSequence = nodePathfinder.findPath(startTriangle, endTriangle);
-		System.out.println("found triangleSequence");
-
 		List<PathSegment> pathSegments = navMeshTriangleTraverser.traverse(triangleSequence, start, end);
 
 		return pathSegments;
