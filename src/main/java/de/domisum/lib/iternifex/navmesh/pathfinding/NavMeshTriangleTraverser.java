@@ -29,10 +29,13 @@ public class NavMeshTriangleTraverser
 	private final Logger logger = java.util.logging.Logger.getLogger("triangleTraverser");
 
 
+	// CONSTANTS
+	private static final double DEFAULT_PORTAL_EDGE_DISTANCE = 0.45;
+
 	// SETTINGS
 	@Getter
 	@Setter
-	private double portalEdgeDistance = 0.4;
+	private double portalEdgeDistance = DEFAULT_PORTAL_EDGE_DISTANCE;
 
 	// TRAVERSE
 	public List<PathSegment> traverse(List<NavMeshTriangle> triangleSequence, Vector3D startLocation, Vector3D endLocation)
