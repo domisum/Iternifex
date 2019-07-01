@@ -1,8 +1,12 @@
 package de.domisum.lib.iternifex;
 
-public class DebugSettings
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DebugSettings
 {
 
-	public static final boolean DEBUG_ACTIVE = true;
+	public static final boolean DEBUG_ACTIVE = false;
 
 }
