@@ -65,23 +65,27 @@ public class NavMeshTriangleTraverser
 		// TRAVERSE
 		public List<PathSegment> traverse()
 		{
-			currentLocation = startLocation;
+			reachPoint(startLocation);
 
-			traverseEdges();
+			traverseEdges(triangleSequence.size());
 
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("upcoming: arrive at end location");
+			arriveAtLocation(endLocation);
+
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("path segments: "+pathSegments);
 			return new ArrayList<>(pathSegments);
 		}
 
-		private void traverseEdges()
+		private void traverseEdges(int indexBound)
 		{
-			for(; currentTargetTriangleIndex < triangleSequence.size(); currentTargetTriangleIndex++)
+			for(; currentTargetTriangleIndex < indexBound; currentTargetTriangleIndex++)
 			{
 				NavMeshTriangle triangleBefore = triangleSequence.get(currentTargetTriangleIndex-1);
 				NavMeshTriangle triangle = triangleSequence.get(currentTargetTriangleIndex);
 				traverseEdge(triangleBefore, triangle);
 			}
-
-			arriveAtLocation(endLocation);
 		}
 
 		private void traverseEdge(NavMeshTriangle from, NavMeshTriangle to)
@@ -167,7 +171,7 @@ public class NavMeshTriangleTraverser
 			}
 		}
 
-		private void pathToFunnelPointLeft(boolean triangleIndexPlusOne)
+		private int pathToFunnelPointLeft(boolean triangleIndexPlusOne)
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
 				logger.info("creating path to funnel point left "+funnelPointLeft);
@@ -175,13 +179,14 @@ public class NavMeshTriangleTraverser
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointLeft);
 			pathSegments.add(pathSegmentWalk);
 
+			int retraverseUpToIndex = funnelPointLeftTriangleIndex;
 			currentTargetTriangleIndex = funnelPointLeftTriangleIndex+(triangleIndexPlusOne ? 1 : 0);
-			currentLocation = funnelPointLeft;
-			funnelPointLeft = null;
-			funnelPointRight = null;
+			reachPoint(funnelPointLeft);
+
+			return retraverseUpToIndex;
 		}
 
-		private void pathToFunnelPointRight(boolean triangleIndexPlusOne)
+		private int pathToFunnelPointRight(boolean triangleIndexPlusOne)
 		{
 			if(DebugSettings.DEBUG_ACTIVE)
 				logger.info("creating path to funnel point right "+funnelPointRight);
@@ -189,10 +194,11 @@ public class NavMeshTriangleTraverser
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, funnelPointRight);
 			pathSegments.add(pathSegmentWalk);
 
+			int retraverseUpToIndex = funnelPointRightTriangleIndex;
 			currentTargetTriangleIndex = funnelPointRightTriangleIndex+(triangleIndexPlusOne ? 1 : 0);
-			currentLocation = funnelPointRight;
-			funnelPointLeft = null;
-			funnelPointRight = null;
+			reachPoint(funnelPointRight);
+
+			return retraverseUpToIndex;
 		}
 
 		private Duo<NavMeshPoint> getSharedPoints(NavMeshTriangle triangle1, NavMeshTriangle triangle2)
@@ -234,28 +240,46 @@ public class NavMeshTriangleTraverser
 					ladder.getDirection()
 			);
 			pathSegments.add(segmentLadder);
-			currentLocation = ladderEndLocation;
+			reachPoint(ladderEndLocation);
+		}
+
+
+		private void reachPoint(Vector3D point)
+		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("reaching point: "+point);
+
+			currentLocation = point;
+			funnelPointLeft = null;
+			funnelPointRight = null;
 		}
 
 		private void arriveAtLocation(Vector3D location)
 		{
-			boolean traverseAgain = handleLastCornerIfNeeded(location);
+			Integer retraverseUpToIndex = handleLastCornerIfNeeded(location);
 
 			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info(PHR.r("arriving at location: {} (traverse again: {})", location, traverseAgain));
+				logger.info(PHR.r("arriving at location: {} (traverse again: {})", location, retraverseUpToIndex));
 
-			if(traverseAgain)
-				traverseEdges();
+			if(retraverseUpToIndex != null)
+			{
+				traverseEdges(retraverseUpToIndex);
+				if(DebugSettings.DEBUG_ACTIVE)
+					logger.info("returning from inner traverseEdges");
+			}
 
 			PathSegmentWalk pathSegmentWalk = new PathSegmentWalk(currentLocation, location);
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("arriving; added path segment: "+pathSegmentWalk);
+
 			pathSegments.add(pathSegmentWalk);
-			currentLocation = location;
+			reachPoint(location);
 		}
 
-		private boolean handleLastCornerIfNeeded(Vector3D location)
+		private Integer handleLastCornerIfNeeded(Vector3D location)
 		{
 			if(funnelPointLeft == null)
-				return false;
+				return null;
 
 			Vector3D toLocation = location.subtract(currentLocation);
 			Vector3D toFunnelPointLeft = funnelPointLeft.subtract(currentLocation);
@@ -263,17 +287,17 @@ public class NavMeshTriangleTraverser
 
 			if(isLeftOf(toLocation, toFunnelPointLeft, false))
 			{
-				pathToFunnelPointLeft(true);
-				return true;
+				int retraverseUpToIndex = pathToFunnelPointLeft(true);
+				return retraverseUpToIndex;
 			}
 
 			if(isRightOf(toLocation, toFunnelPointRight, false))
 			{
-				pathToFunnelPointRight(true);
-				return true;
+				int retraverseUpToIndex = pathToFunnelPointRight(true);
+				return retraverseUpToIndex;
 			}
 
-			return false;
+			return null;
 		}
 
 	}
