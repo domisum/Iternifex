@@ -5,6 +5,7 @@ import de.domisum.lib.auxilium.util.PHR;
 import de.domisum.lib.iternifex.DebugSettings;
 import de.domisum.lib.iternifex.Edge;
 import de.domisum.lib.iternifex.Node;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class AStarPathfinder implements Pathfinder
 		private final N endNode;
 
 		// TEMP
-		private final SortedSet<PathFindingNode> unvisitedNodes = new TreeSet<>(Comparator.comparingDouble(PathFindingNode::getCombinedWeight));
+		private final Queue<PathFindingNode> unvisitedNodes = new PriorityQueue<>(Comparator.comparingDouble(PathFindingNode::getCombinedWeight));
 		private final Map<N, PathFindingNode> pathFindingNodeMap = new HashMap<>();
 
 
@@ -73,8 +74,7 @@ public class AStarPathfinder implements Pathfinder
 
 		private PathFindingNode popBestUnvisitedNode()
 		{
-			PathFindingNode first = unvisitedNodes.first();
-			unvisitedNodes.remove(first);
+			PathFindingNode first = unvisitedNodes.poll();
 			return first;
 		}
 
@@ -145,6 +145,7 @@ public class AStarPathfinder implements Pathfinder
 
 
 		@RequiredArgsConstructor
+		@EqualsAndHashCode(of = "node")
 		private class PathFindingNode
 		{
 
