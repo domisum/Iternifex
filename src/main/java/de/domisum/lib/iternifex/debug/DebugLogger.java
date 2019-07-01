@@ -10,14 +10,14 @@ public final class DebugLogger
 {
 
 	// LOG
-	public static void log(String message)
+	public static void log(CharSequence message)
 	{
 		if(DebugSettings.DEBUG_ACTIVE)
 		{
 			String callerClassName = new Exception().getStackTrace()[1].getClassName();
 			Logger logger = java.util.logging.Logger.getLogger(callerClassName);
 
-			logger.info(message);
+			logger.info(message.toString());
 		}
 	}
 
