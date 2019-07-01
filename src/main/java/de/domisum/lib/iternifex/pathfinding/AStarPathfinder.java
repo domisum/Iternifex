@@ -12,9 +12,11 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class AStarPathfinder implements Pathfinder
 {
@@ -50,7 +52,7 @@ public class AStarPathfinder implements Pathfinder
 				DebugLogger.log("Unvisited nodes: "+unvisitedNodes.size());
 
 				@SuppressWarnings("unchecked")
-				PathFindingNode nodeToVisit = (PathFindingNode) unvisitedNodes.getBest();
+				PathFindingNode nodeToVisit = (PathFindingNode) unvisitedNodes.popBest();
 				visitNode(nodeToVisit);
 
 				if(Objects.equals(nodeToVisit.getNode(), endNode))
@@ -100,11 +102,33 @@ public class AStarPathfinder implements Pathfinder
 
 			double newWeightToNode = nodeFrom.getStartToNodeWeight()+nodeFrom.node.getEdgeTo(node.getNode()).getWeight();
 			if(!node.getNode().equals(startNode)) // don't set reached from on start node
-				if(nodeUnreachedBefore || (newWeightToNode < node.getStartToNodeWeight()))
+				if(nodeUnreachedBefore)
+				{
 					node.setReachedFrom(nodeFrom);
+					nodeFrom.addChild(node);
+				}
+				else if(newWeightToNode < node.getStartToNodeWeight())
+				{
+					DebugLogger.log("Found shorter way to previously reached node");
+
+					node.reachedFrom.removeChild(node);
+					node.setReachedFrom(nodeFrom);
+					nodeFrom.addChild(node);
+
+					decreaseNodeWeightForSubTree(node);
+				}
 
 			if(nodeUnreachedBefore)
 				unvisitedNodes.insert(node);
+		}
+
+		private void decreaseNodeWeightForSubTree(PathFindingNode node)
+		{
+			if(unvisitedNodes.contains(node))
+				unvisitedNodes.decreaseWeight(node);
+
+			for(PathFindingNode child : node.getChildren())
+				decreaseNodeWeightForSubTree(child);
 		}
 
 
@@ -128,10 +152,31 @@ public class AStarPathfinder implements Pathfinder
 
 			@Getter
 			private final N node;
+
 			@Setter
 			@Getter
 			private PathFindingNode reachedFrom;
+			@Getter
+			private final Set<PathFindingNode> children = new HashSet<>();
 
+
+			// CHILDREN
+			public void addChild(PathFindingNode child)
+			{
+				children.add(child);
+			}
+
+			public void removeChild(PathFindingNode child)
+			{
+				children.remove(child);
+			}
+
+
+			// WEIGHT
+			public double getCombinedWeight()
+			{
+				return getStartToNodeWeight()+getNodeToEndWeight();
+			}
 
 			public double getStartToNodeWeight()
 			{
@@ -149,10 +194,6 @@ public class AStarPathfinder implements Pathfinder
 				return node.getHeuristicWeightTo(endNode);
 			}
 
-			public double getCombinedWeight()
-			{
-				return getStartToNodeWeight()+getNodeToEndWeight();
-			}
 		}
 
 	}

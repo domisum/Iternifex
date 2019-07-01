@@ -1,39 +1,52 @@
 package de.domisum.lib.iternifex.pathfinding;
 
 import de.domisum.lib.iternifex.pathfinding.AStarPathfinder.PathFinding.PathFindingNode;
+import de.domisum.lib.iternifex.pathfinding.FibonacciHeap.Entry;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UnvisitedNodes
 {
 
 	// CONTENT
-	private final Queue<PathFindingNode> nodes = new PriorityQueue<>(Comparator.comparingDouble(PathFindingNode::getCombinedWeight));
+	private final FibonacciHeap<PathFindingNode> fibonacciHeap = new FibonacciHeap<>();
+	private final Map<PathFindingNode, Entry<PathFindingNode>> entries = new HashMap<>();
 
 
 	// GETTERS
 	public boolean isEmpty()
 	{
-		return nodes.isEmpty();
+		return fibonacciHeap.isEmpty();
 	}
 
 	public int size()
 	{
-		return nodes.size();
+		return fibonacciHeap.size();
+	}
+
+	public boolean contains(PathFindingNode node)
+	{
+		return entries.containsKey(node);
 	}
 
 
 	// ACTIONS
 	public void insert(PathFindingNode node)
 	{
-		nodes.add(node);
+		Entry<PathFindingNode> entry = fibonacciHeap.enqueue(node, node.getCombinedWeight());
+		entries.put(node, entry);
 	}
 
-	public PathFindingNode getBest()
+	public void decreaseWeight(PathFindingNode node)
 	{
-		return nodes.poll();
+		Entry<PathFindingNode> entry = entries.get(node);
+		fibonacciHeap.decreaseKey(entry, node.getCombinedWeight());
+	}
+
+	public PathFindingNode popBest()
+	{
+		return fibonacciHeap.dequeueMin().getValue();
 	}
 
 }
