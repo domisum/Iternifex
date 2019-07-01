@@ -9,7 +9,7 @@ Iternifex is Latin for "Creator of Paths".
 ### Features
 
 * A* pathfinding (generic, universally applicable)
-* NavMesh pathfinding (supporting walking and ladders out of the box)
+* NavMesh pathfinding (extensible, supporting walking and ladders out of the box)
 * NavMesh serialization and storage
 
 
