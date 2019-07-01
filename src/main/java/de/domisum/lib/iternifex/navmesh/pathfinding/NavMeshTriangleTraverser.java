@@ -64,8 +64,8 @@ public class NavMeshTriangleTraverser
 		// TRAVERSE
 		public List<PathSegment> traverse()
 		{
-			reachPoint(startLocation);
-
+			DebugLogger.log("starting traversal");
+			reachPoint(getImprovedStartLocation());
 			traverseEdges(triangleSequence.size());
 
 			DebugLogger.log("upcoming: arrive at end location");
@@ -73,6 +73,24 @@ public class NavMeshTriangleTraverser
 
 			DebugLogger.log("path segments: "+pathSegments);
 			return new ArrayList<>(pathSegments);
+		}
+
+		/*
+		 * moves start location off triangle edges.
+		 *
+		 * this is done in order to avoid issues with vectors to portal points which are directly opposed, which in turn
+		 * would make it impossible to differentiate left and right point
+		 */
+		private Vector3D getImprovedStartLocation()
+		{
+			if(triangleSequence.isEmpty())
+				return startLocation;
+
+			NavMeshTriangle startTriangle = triangleSequence.get(0);
+			Vector3D startLocationToStartTriangleCenter = startTriangle.getCenter().subtract(startLocation);
+
+			Vector3D startLocationOffset = startLocationToStartTriangleCenter.normalize().multiply(0.01);
+			return startLocation.add(startLocationOffset);
 		}
 
 
