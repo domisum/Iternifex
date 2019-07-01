@@ -120,7 +120,7 @@ public class NavMeshTriangleTraverser
 		// portal traversal
 		private void traversePortal(NavMeshTriangle from, NavMeshTriangle to)
 		{
-			DebugLogger.log(PHR.r("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId()));
+			DebugLogger.log(PHR.rcs("Traversing portal from triangle '{}' to triangle '{}'", from.getId(), to.getId()));
 
 			Duo<NavMeshPoint> sharedPoints = getSharedPoints(from, to);
 			LineSegment3D portal = new LineSegment3D(sharedPoints.getA(), sharedPoints.getB()).getShortenedBothEnds(
@@ -234,7 +234,7 @@ public class NavMeshTriangleTraverser
 		// ladder traversal
 		private void traverseLadder(NavMeshTriangle from, NavMeshEdgeLadder ladder)
 		{
-			DebugLogger.log(PHR.r("traversing ladder from triangle '{}' to '{}'", from, ladder.getOther(from)));
+			DebugLogger.log(PHR.rcs("traversing ladder from triangle '{}' to '{}'", from, ladder.getOther(from)));
 
 			Vector3D ladderStartLocation = ladder.getTriangleA().equals(from) ?
 					ladder.getBottomLadderLocation() :
@@ -299,7 +299,7 @@ public class NavMeshTriangleTraverser
 		{
 			Integer retraverseUpToIndex = handleLastCornerIfNeeded(location);
 
-			DebugLogger.log(PHR.r("arriving at location: {} (traverse again: {})", location, retraverseUpToIndex));
+			DebugLogger.log(PHR.rcs("arriving at location: {} (traverse again: {})", location, retraverseUpToIndex));
 
 			if(retraverseUpToIndex != null)
 			{

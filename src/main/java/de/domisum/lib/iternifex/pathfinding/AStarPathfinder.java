@@ -71,19 +71,19 @@ public class AStarPathfinder implements Pathfinder
 			while(node != null)
 			{
 				nodesReversed.add(node.getNode());
-				DebugLogger.log(PHR.r("Added node '{}' to reverse path", node.getNode()));
+				DebugLogger.log(PHR.rcs("Added node '{}' to reverse path", node.getNode()));
 
 				node = node.getReachedFrom();
 			}
 
-			DebugLogger.log(PHR.r("Building reversed path done, reversing to get it into right order"));
+			DebugLogger.log(PHR.rcs("Building reversed path done, reversing to get it into right order"));
 
 			return new ArrayList<>(Lists.reverse(nodesReversed));
 		}
 
 		private void visitNode(PathFindingNode node)
 		{
-			DebugLogger.log(PHR.r("Visiting node '{}'", node.getNode()));
+			DebugLogger.log(PHR.rcs("Visiting node '{}'", node.getNode()));
 
 			for(Edge<N, E> edge : node.getNode().getEdges())
 			{
@@ -96,7 +96,7 @@ public class AStarPathfinder implements Pathfinder
 
 		private void reachNode(PathFindingNode nodeFrom, PathFindingNode node)
 		{
-			DebugLogger.log(PHR.r("Reaching node '{}' from node '{}'", node.getNode(), nodeFrom.getNode()));
+			DebugLogger.log(PHR.rcs("Reaching node '{}' from node '{}'", node.getNode(), nodeFrom.getNode()));
 
 			boolean nodeUnreachedBefore = node.getReachedFrom() == null;
 
