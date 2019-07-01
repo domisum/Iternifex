@@ -2,24 +2,19 @@ package de.domisum.lib.iternifex.pathfinding;
 
 import com.google.common.collect.Lists;
 import de.domisum.lib.auxilium.util.PHR;
-import de.domisum.lib.iternifex.debug.DebugLogger;
 import de.domisum.lib.iternifex.Edge;
 import de.domisum.lib.iternifex.Node;
+import de.domisum.lib.iternifex.debug.DebugLogger;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class AStarPathfinder implements Pathfinder
 {
@@ -32,7 +27,7 @@ public class AStarPathfinder implements Pathfinder
 	}
 
 	@RequiredArgsConstructor
-	private static class PathFinding<N extends Node<N, E>, E extends Edge<N, E>>
+	protected static class PathFinding<N extends Node<N, E>, E extends Edge<N, E>>
 	{
 
 		// INPUT
@@ -40,24 +35,22 @@ public class AStarPathfinder implements Pathfinder
 		private final N endNode;
 
 		// TEMP
-		private final Queue<PathFindingNode> unvisitedNodes = new PriorityQueue<>(Comparator.comparingDouble(PathFindingNode::getCombinedWeight));
+		private final UnvisitedNodes unvisitedNodes = new UnvisitedNodes();
 		private final Map<N, PathFindingNode> pathFindingNodeMap = new HashMap<>();
 
 
 		// FIND PATH
 		public List<N> findPath() throws PathfindingException
 		{
-			unvisitedNodes.add(getPathfindingNodeFor(startNode));
+			unvisitedNodes.insert(getPathfindingNodeFor(startNode));
 			DebugLogger.log("Starting pathfinding...");
 
 			while(!unvisitedNodes.isEmpty())
 			{
-				DebugLogger.log(PHR.r(
-								"Unvisited nodes: {}",
-								unvisitedNodes.stream().map(PathFindingNode::getNode).collect(Collectors.toList())
-						));
+				DebugLogger.log("Unvisited nodes: "+unvisitedNodes.size());
 
-				PathFindingNode nodeToVisit = popBestUnvisitedNode();
+				@SuppressWarnings("unchecked")
+				PathFindingNode nodeToVisit = (PathFindingNode) unvisitedNodes.getBest();
 				visitNode(nodeToVisit);
 
 				if(Objects.equals(nodeToVisit.getNode(), endNode))
@@ -65,12 +58,6 @@ public class AStarPathfinder implements Pathfinder
 			}
 
 			throw new PathfindingException("No connection between start and end node, therefore couldn't find path");
-		}
-
-		private PathFindingNode popBestUnvisitedNode()
-		{
-			PathFindingNode first = unvisitedNodes.poll();
-			return first;
 		}
 
 		private List<N> buildPath(PathFindingNode endPathfindingNode)
@@ -117,7 +104,7 @@ public class AStarPathfinder implements Pathfinder
 					node.setReachedFrom(nodeFrom);
 
 			if(nodeUnreachedBefore)
-				unvisitedNodes.add(node);
+				unvisitedNodes.insert(node);
 		}
 
 
@@ -136,7 +123,7 @@ public class AStarPathfinder implements Pathfinder
 
 		@RequiredArgsConstructor
 		@EqualsAndHashCode(of = "node")
-		private class PathFindingNode
+		protected class PathFindingNode
 		{
 
 			@Getter
