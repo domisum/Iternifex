@@ -32,7 +32,7 @@ public class AStarPathfinder implements Pathfinder
 	}
 
 	@RequiredArgsConstructor
-	private class PathFinding<N extends Node<N, E>, E extends Edge<N, E>>
+	private static class PathFinding<N extends Node<N, E>, E extends Edge<N, E>>
 	{
 
 		// INPUT
