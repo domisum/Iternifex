@@ -3,6 +3,7 @@ package de.domisum.lib.iternifex.pathfinding;
 /* **********************************************************************
  * File: FibonacciHeap.java
  * Author: Keith Schwarz (htiek@cs.stanford.edu)
+ * Source: http://keithschwarz.com/interesting/code/?dir=fibonacci-heap
  *
  * An implementation of a priority queue backed by a Fibonacci heap,
  * as described by Fredman and Tarjan.  Fibonacci heaps are interesting
