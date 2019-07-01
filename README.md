@@ -1,14 +1,18 @@
 Iternifex
 ==================
 
-Iternifex is a simple pathfinding library which works with generics.
+Iternifex is a pathfinding library. 
+The general pathfinding algorithm(s) are implemented using generics.
 
+Iternifex is Latin for "Creator of Paths".
 
 ### Features
 
-* A* pathfinding
+* A* pathfinding (generic, universally applicable)
+* NavMesh pathfinding (supporting walking and ladders out of the box)
+* NavMesh serialization and storage
 
 
-### What I learned
+### What I learned from this project
 
-* More experience working with generics
+* Working with more complex generics
