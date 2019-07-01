@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class NavMeshTriangleTraverser
 {
 
-	private final Logger logger = java.util.logging.Logger.getLogger("triangleTraverser");
+	private final Logger logger = Logger.getLogger("triangleTraverser");
 
 
 	// CONSTANTS
