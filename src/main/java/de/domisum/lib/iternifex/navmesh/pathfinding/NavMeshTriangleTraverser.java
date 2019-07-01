@@ -216,6 +216,9 @@ public class NavMeshTriangleTraverser
 
 		private void traverseLadder(NavMeshTriangle from, NavMeshEdgeLadder ladder)
 		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info(PHR.r("traversing ladder from triangle '{}' to '{}'", from, ladder.getOther(from)));
+
 			Vector3D ladderStartLocation = ladder.getTriangleA().equals(from) ?
 					ladder.getBottomLadderLocation() :
 					ladder.getTopLadderLocation();
@@ -236,6 +239,9 @@ public class NavMeshTriangleTraverser
 
 		private void arriveAtLocation(Vector3D location)
 		{
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info("arriving at location: "+location);
+
 			boolean traverseAgain = handleLastCornerIfNeeded(location);
 			if(traverseAgain)
 				traverseEdges();
