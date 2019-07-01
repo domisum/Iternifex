@@ -25,9 +25,6 @@ import java.util.Set;
 public class NavMeshTriangleTraverser
 {
 
-
-
-
 	// CONSTANTS
 	private static final double DEFAULT_PORTAL_EDGE_DISTANCE = 0.45;
 

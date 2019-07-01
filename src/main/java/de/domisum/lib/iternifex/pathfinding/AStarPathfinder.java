@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
 public class AStarPathfinder implements Pathfinder
 {
 
-	private final Logger logger = java.util.logging.Logger.getLogger("aStarPathfinder");
-
-
 	// FIND PATH
 	@Override
 	public <N extends Node<N, E>, E extends Edge<N, E>> List<N> findPath(N startNode, N endNode) throws PathfindingException
