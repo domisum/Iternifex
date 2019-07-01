@@ -6,6 +6,7 @@ import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import de.domisum.lib.iternifex.Node;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 {
 
@@ -53,14 +55,6 @@ public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 		this.pointA = pointA;
 		this.pointB = pointB;
 		this.pointC = pointC;
-	}
-
-
-	// OBJECT
-	@Override
-	public String toString()
-	{
-		return "NavMeshTriangle{"+"id='"+id+'\''+", pointA="+pointA+", pointB="+pointB+", pointC="+pointC+'}';
 	}
 
 

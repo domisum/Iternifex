@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class AStarPathfinder implements Pathfinder
 {
@@ -54,8 +55,13 @@ public class AStarPathfinder implements Pathfinder
 
 			while(!unvisitedNodes.isEmpty())
 			{
-				PathFindingNode nodeToVisit = getBestUnvisitedNode();
-				unvisitedNodes.remove(nodeToVisit);
+				if(DebugSettings.DEBUG_ACTIVE)
+					logger.info(PHR.r(
+							"Unvisited nodes: {}",
+							unvisitedNodes.stream().map(PathFindingNode::getNode).collect(Collectors.toList())
+					));
+
+				PathFindingNode nodeToVisit = popBestUnvisitedNode();
 				visitNode(nodeToVisit);
 
 				if(Objects.equals(nodeToVisit.getNode(), endNode))
@@ -65,9 +71,11 @@ public class AStarPathfinder implements Pathfinder
 			throw new PathfindingException("No connection between start and end node, therefore couldn't find path");
 		}
 
-		private PathFindingNode getBestUnvisitedNode()
+		private PathFindingNode popBestUnvisitedNode()
 		{
-			return unvisitedNodes.first();
+			PathFindingNode first = unvisitedNodes.first();
+			unvisitedNodes.remove(first);
+			return first;
 		}
 
 		private List<N> buildPath(PathFindingNode endPathfindingNode)
