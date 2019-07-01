@@ -101,7 +101,7 @@ public class AStarPathfinder implements Pathfinder
 			boolean nodeUnreachedBefore = node.getReachedFrom() == null;
 
 			double newWeightToNode = nodeFrom.getStartToNodeWeight()+nodeFrom.node.getEdgeTo(node.getNode()).getWeight();
-			if(!node.getNode().equals(startNode)) // don't set reached from on start node
+			if(!node.getNode().equals(startNode)) // don't set reachedFrom on start node
 				if(nodeUnreachedBefore)
 				{
 					node.setReachedFrom(nodeFrom);
