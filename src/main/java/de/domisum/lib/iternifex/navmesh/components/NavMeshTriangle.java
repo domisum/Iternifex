@@ -1,5 +1,6 @@
 package de.domisum.lib.iternifex.navmesh.components;
 
+import de.domisum.lib.auxilium.data.container.math.Plane3D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.data.container.math.Vector3D;
 import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
@@ -19,6 +20,9 @@ import java.util.UUID;
 @ToString(of = "id")
 public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 {
+
+	// CONSTANTS
+	private static final double MAX_PLANE_TO_POINT_DISTANCE = 2.0;
 
 	// MAIN ATTRUBUTES
 	@Getter
@@ -75,7 +79,10 @@ public class NavMeshTriangle implements Node<NavMeshTriangle, NavMeshEdge>
 		if(!triangleAsPolygon2D.contains(location2D))
 			return false;
 
-		// TODO height check
+		Plane3D trianglePlane = Plane3D.throughPoints(pointA, pointB, pointC);
+		double locationDistanceToPlane = trianglePlane.distanceTo(location);
+		if(locationDistanceToPlane > MAX_PLANE_TO_POINT_DISTANCE)
+			return false;
 
 		return true;
 	}
