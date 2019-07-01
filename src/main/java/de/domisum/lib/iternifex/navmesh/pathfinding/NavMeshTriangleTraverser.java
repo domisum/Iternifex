@@ -239,10 +239,11 @@ public class NavMeshTriangleTraverser
 
 		private void arriveAtLocation(Vector3D location)
 		{
-			if(DebugSettings.DEBUG_ACTIVE)
-				logger.info("arriving at location: "+location);
-
 			boolean traverseAgain = handleLastCornerIfNeeded(location);
+
+			if(DebugSettings.DEBUG_ACTIVE)
+				logger.info(PHR.r("arriving at location: {} (traverse again: {})", location, traverseAgain));
+
 			if(traverseAgain)
 				traverseEdges();
 
